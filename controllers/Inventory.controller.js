@@ -85,5 +85,43 @@ module.exports = {
             res.json({id : newInventory.id})
 
         })
-    } 
+    } ,
+
+    delete: function (req,res){
+        const invenId =req.param("inventoryId")//req.body.inventoryId;
+        console.log(invenId)
+        
+        InventoryModel.findByIdAndRemove(invenId)
+            .then(()=>{
+                console.log('Inventory DELETED');
+            })
+            .catch(err=> console.log(err));
+            
+
+    },
+    patch: function (req,res){
+        const invenId =req.param("inventoryId")//req.body.inventoryId;
+        console.log(invenId)
+
+        var inventoryObject = {}
+        if (req.body.name)
+            inventoryObject.name = req.body.name
+        if (req.body.status)
+            inventoryObject.status = req.body.status
+        if(req.body.type)
+            inventoryObject.type = req.body.type
+        
+        InventoryModel.findByIdAndUpdate(invenId ,inventoryObject).then(()=>{
+
+
+            console.log("Updated Inventory : ");
+        })
+        .catch(err=>console.log(err))
+                          
+         
+            
+
+    },
+
+
 }
