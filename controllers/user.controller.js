@@ -75,12 +75,14 @@ const login = (req, res) => {
 
       if (isMatch) {  // if password matched .. sign and send the token
         const payload = { username: user.username, email: user.email, id: user.id };
+
         jwt.sign(
           payload, SECRET_KEY, { expiresIn: 3600 * 24 * 3 },
           (err, token) => {
             res.json({
               success: true,
-              token: "Bearer " + token
+              token: "Bearer " + token,
+              user:user
             });
           }
         );
@@ -94,6 +96,9 @@ const login = (req, res) => {
   });
 };
 
+
+
+
 const test = (req, res) => {
   res.json({ message: "This is user controller" })
 };
@@ -102,5 +107,6 @@ module.exports = {
   register,
   login,
   attach_id,
-  test
+  test,
+ 
 }

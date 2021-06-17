@@ -2,7 +2,7 @@
 const ProductModel = require('../models/Product.model');
 const CONTROLLER_NAME = 'ProductController'
 
-const Product_NOT_FOUND_ERROR = {
+const PRODUCT_NOT_FOUND_ERROR = {
     message: "Product not Found"
 }
 
@@ -20,7 +20,7 @@ module.exports = {
                 console.log(error)
                 res.json(error)
             }
-
+            console.log(result)
             console.log("Returning from get function in " + CONTROLLER_NAME)
             res.json(result)
         })
@@ -58,6 +58,8 @@ module.exports = {
         })
     },
 
+
+
     post: function(req,res){
 
         console.log("Entering post function in " + CONTROLLER_NAME)
@@ -68,11 +70,13 @@ module.exports = {
         if (req.body.status)
             productObject.status = req.body.status
         if (req.body.description)
-            productObject.description=re1.body.description
+            productObject.description=req.body.description
         if (req.body.quantity)
             productObject.quantity=req.body.quantity
         if (req.body.price)
             productObject.price=req.body.price
+        if (req.body.id)
+            productObject.currentInventory=req.body.id
             
         
         
@@ -100,8 +104,13 @@ module.exports = {
        ProductModel.findByIdAndRemove(prodId)
             .then(()=>{
                 console.log('PRODUCT DELETED');
+                 res.json({"id":prodId})
             })
-            .catch(err=> console.log(err));
+            .catch((err)=>{
+                 console.log(err)
+            res.json({"error":err})
+        
+            });
             
 
     },
@@ -113,17 +122,25 @@ module.exports = {
         var prodObject = {}
         if (req.body.name)
             prodObject.name = req.body.name
-        if (req.body.status)
-            prodObject.status = req.body.status
-        if(req.body.type)
-            prodObject.type = req.body.type
+        if (req.body.quantity)
+            prodObject.quantity = req.body.quantity
+        if(req.body.price)
+            prodObject.price = req.body.price
+        if(req.body.id)
+            prodObject.currentInventory = req.body.id
         
         ProductModel.findByIdAndUpdate(prodId ,prodObject).then(()=>{
 
 
-            console.log("Updated Product : ", prod);
+            console.log("Updated Product : ",prodObject);
+            res.json({"id":prodId})
+
         })
-        .catch((err)=> console.log(err))
+        .catch((err)=>{ 
+
+            console.log(err)
+            res.json({"error":err})
+        })
                           
                           
          
